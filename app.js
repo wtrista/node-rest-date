@@ -1,11 +1,10 @@
 const express = require('express');
 const app = express();
 
-// acts as a middleware
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: 'It works!'
-    });
-});
+const dateRoutes = require('./api/routes/dates');
+const eventRoutes = require('./api/routes/events');
+
+app.use('/dates', dateRoutes);
+app.use('/events', eventRoutes);
 
 module.exports = app;
