@@ -8,8 +8,13 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
+    const date = {
+        dateMDY: req.body.dateMDY,
+        dayOfWeek: req.body.dayOfWeek
+    };
     res.status(201).json ({
-        message: 'Handling POST requests to /dates'
+        message: 'Handling POST requests to /dates',
+        createdDate: date
     });
 })
 

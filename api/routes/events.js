@@ -8,8 +8,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const event = {
+        eventDescription: req.body.eventDescription,
+        mood: req.body.mood
+    };
     res.status(201).json({
-        message: 'Events were created'
+        message: 'Events were created',
+        event: event
     })
 });
 
