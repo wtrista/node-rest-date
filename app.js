@@ -2,9 +2,19 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const dateRoutes = require('./api/routes/dates');
 const eventRoutes = require('./api/routes/events');
+
+mongoose.connect(
+    'mongodb://tris:' + 
+    process.env.MONGO_ATLAS_PW + 
+    '@node-rest-data-shard-00-00-bvbma.mongodb.net:27017,node-rest-data-shard-00-01-bvbma.mongodb.net:27017,node-rest-data-shard-00-02-bvbma.mongodb.net:27017/test?ssl=true&replicaSet=node-rest-data-shard-0&authSource=admin&retryWrites=true',
+    {
+        useNewUrlParser: true
+    }
+);
 
 app.use(morgan('dev'));
 // easily readable json/url encoded data
