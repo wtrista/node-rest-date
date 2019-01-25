@@ -15,6 +15,7 @@ mongoose.connect(
         useNewUrlParser: true
     }
 );
+mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
 // easily readable json/url encoded data

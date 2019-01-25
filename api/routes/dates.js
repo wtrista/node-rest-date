@@ -6,10 +6,24 @@ const Date = require('../models/date');
 
 router.get('/', (req, res, next) => {
     Date.find()
+        .select('dateMDY dayOfWeek _id')
         .exec()
         .then(docs => {
-            console.log(docs);
-            res.status(200).json(docs);
+            const response = {
+                count: docs.length,
+                dates: docs.map(doc => {
+                    return {
+                        date: doc.dateMDY,
+                        day: doc.dayOfWeek,
+                        _id: doc._id,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3000/dates/' + doc._id
+                        }
+                    }
+                })
+            }
+            res.status(200).json(response);
         })
         .catch(err => {
             console.log(err);
@@ -30,8 +44,16 @@ router.post('/', (req, res, next) => {
         .then(result => {
             console.log(result);
             res.status(201).json ({
-                message: 'Handling POST requests to /dates',
-                createdDate: result
+                message: 'What? Again?!',
+                createdDate: {
+                    date: result.dateMDY,
+                    day: result.dayOfWeek,
+                    _id: result._id,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:3000/dates/' + result._id
+                    }
+                }
             });
             })
         .catch(err => {
@@ -46,11 +68,18 @@ router.post('/', (req, res, next) => {
 router.get('/:dateId', (req, res, next) => {
     const id = req.params.dateId;
     Date.findById(id)
+        .select('dateMDY dayOfWeek _id')
         .exec()
         .then(doc => {
-            console.log(doc);
+            console.log("From database", doc);
             if(doc){
-                res.status(200).json(doc);
+                res.status(200).json({
+                    date: doc,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:3000/dates/' + doc._id
+                    }
+                });
             }else{
                 res.status(404).json({
                     message: "This date doesn't exist..."
@@ -83,8 +112,13 @@ router.patch('/:dateId', (req, res, next) => {
     Date.update({_id: id}, {$set: updateOps})
         .exec()
         .then(result => {
-            console.log(result);
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'No idea why but updating this date...',
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:3000/dates/' + id
+                }
+            });
         })
         .catch(err => {
             console.log(err);
@@ -104,7 +138,14 @@ router.delete('/:dateId', (req, res, next) => {
     })
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'Deleted a record...why tho?',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:3000/dates',
+                    body: {dateMDY: 'String', dayOfWeek: 'String'}
+                }
+            });
         })
         .catch(err => {
             console.log(err);
