@@ -9,6 +9,7 @@ router.get('/', (req, res, next) => {
     Event
         .find()
         .select('date mood _id')
+        .populate('date', 'dateMDY')
         .exec()
         .then(docs => {
             res.status(200).json({
@@ -74,6 +75,8 @@ router.post('/', (req, res, next) => {
 
 router.get('/:eventId', (req, res, next) => {
     Event.findById(req.params.eventId)
+        .select('date mood _id')
+        .populate('date', 'dateMDY')
         .exec()
         .then(event => {
             if(!event){
