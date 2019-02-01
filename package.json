@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/wtrista/node-rest-date#readme",
   "dependencies": {
+    "bcrypt": "^3.0.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.6",
     "morgan": "^1.9.1",
