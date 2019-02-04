@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const dateRoutes = require('./api/routes/dates');
 const eventRoutes = require('./api/routes/events');
+const userRoutes = require('./api/routes/users');
 
 mongoose.connect(
     'mongodb://tris:' + 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/dates', dateRoutes);
 app.use('/events', eventRoutes);
+app.use('/users', userRoutes);
 
 // if reach here, means no routes found
 app.use((req, res, next) => {
