@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({
     // how files are stored
@@ -27,7 +28,7 @@ const upload = multer({storage: storage, fileFilter: fileFilter});
 const Event = require('../models/event');
 const Date = require('../models/date');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     Event
         .find()
         .select('date mood _id photo')
@@ -58,7 +59,7 @@ router.get('/', (req, res, next) => {
 
 });
 
-router.post('/', upload.single('photo'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('photo'), (req, res, next) => {
     // single: one file at a time
     console.log(req.file);
     Date.findById(req.body.dateId)
@@ -102,7 +103,7 @@ router.post('/', upload.single('photo'), (req, res, next) => {
         })
 });
 
-router.get('/:eventId', (req, res, next) => {
+router.get('/:eventId', checkAuth, (req, res, next) => {
     Event.findById(req.params.eventId)
         .select('date mood _id photo')
         .populate('date', 'dateMDY')
@@ -128,7 +129,7 @@ router.get('/:eventId', (req, res, next) => {
         });
 });
 
-router.delete('/:eventId', (req, res, next) => {
+router.delete('/:eventId', checkAuth, (req, res, next) => {
     Event.remove({_id: req.params.eventId})
         .exec()
         .then(result => {

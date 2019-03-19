@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
 
 const Date = require('../models/date');
 
@@ -33,7 +34,7 @@ router.get('/', (req, res, next) => {
         });
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     const date = new Date({
         _id: new mongoose.Types.ObjectId(),
         dateMDY: req.body.dateMDY,
@@ -102,7 +103,7 @@ router.get('/:dateId', (req, res, next) => {
     // }
 });
 
-router.patch('/:dateId', (req, res, next) => {
+router.patch('/:dateId', checkAuth, (req, res, next) => {
     const id = req.params.dateId;
     const updateOps = {};
     for(const ops of req.body){
@@ -131,7 +132,7 @@ router.patch('/:dateId', (req, res, next) => {
     // });
 });
 
-router.delete('/:dateId', (req, res, next) => {
+router.delete('/:dateId', checkAuth, (req, res, next) => {
     const id = req.params.dateId;
     Date.remove({
         _id: id
